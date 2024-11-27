@@ -5,6 +5,8 @@ params.experimentInfo = "experiment_info.txt"
 
 params.tx2gene = "tx2gene.csv"
 params.referenceTranscriptome ="Mus_musculus_c57bl6nj.C57BL_6NJ_v1.cdna.all.fa.gz"
+params.geneAnnotations = "Mus_musculus_c57bl6nj.C57BL_6NJ_v1.113.gtf.gz"
+
 params.rscript = "DESeq2_DEanalysis.R"
 
 process fastQC{
@@ -29,39 +31,6 @@ process fastQC{
 
 }
 
-
-process fastp{
-
-    publishDir 'results/fastp', mode: 'symlink'
-    container 'maubermann/test:1.0'
-    //container 'biocontainers/fastp:v0.20.1_cv1'
-    //trims off adapters for paired read FASTQ files
-    
-    input:
-        path fastq_file_1
-        path fastq_file_2
-        //tuple path( fastq_file_1), path(fastq_file_2)
-        //other files that wouldn't be called directly but that are needed in the wd would go here
-
-    output:
-        tuple path("${fastq_file_1.baseName}_trim.fastq"), path("${fastq_file_2.baseName}_trim.fastq") ,emit: trim
-        //same tuple could go in input
-        path "${fastq_file_1.baseName}_fastp_report.html"    ,emit:  htmlRep
-        path "${fastq_file_1.baseName}_fastp_report.json"    ,emit:  jsonRep
-
-    script:
-    """
-    fastp -i ${fastq_file_1} \
-            -I ${fastq_file_2} \
-            -o ${fastq_file_1.baseName}_trim.fastq \
-            -O ${fastq_file_2.baseName}_trim.fastq \
-            -h ${fastq_file_1.baseName}_fastp_report.html\
-            -j ${fastq_file_1.baseName}_fastp_report.json\
-            --detect_adapter_for_pe --cut_front --cut_tail
-    """
-
-
-}
 
 
 process FASTP {
@@ -131,6 +100,7 @@ process SALMON_QUANTIFY{
  
 }
 
+
 process DESEQ2{
 
     container 'resolwebio/rnaseq:5.11.0'
@@ -139,8 +109,9 @@ process DESEQ2{
     input:
     path all_quant_dir
     path experiment_info
-    path tx2gene
+    
     path deseq2_r_script 
+    path annotations
 
     output:
     path "genes_padj_significant.csv"
@@ -148,8 +119,8 @@ process DESEQ2{
 
     script:
     """
-    chmod +x ${deseq2_r_script}
-    ./${deseq2_r_script} . ${experiment_info} ${tx2gene} 
+    #chmod +x ${deseq2_r_script}
+    ./${deseq2_r_script} . ${experiment_info} ${annotations} 
     """
 
 }
@@ -159,17 +130,16 @@ workflow  {
     fastq_directory = file(params.input_dir)
     all_filenames_ch = Channel.fromPath(params.allExperiments).splitCsv().flatten()
     transcriptome = file(params.referenceTranscriptome)
-
+    annotation_file = file(params.geneAnnotations)
 
     FASTP(fastq_directory, all_filenames_ch)
     SALMON_INDEX(transcriptome)
     SALMON_QUANTIFY(FASTP.out.trimmedTuple, SALMON_INDEX.out)
 
     
-    tx2gene = file(params.tx2gene)
     rscript = file(params.rscript)
     experiment_info = file(params.experimentInfo)
-    DESEQ2(SALMON_QUANTIFY.out.collect(), experiment_info,tx2gene,rscript)
+    DESEQ2(SALMON_QUANTIFY.out.collect(), experiment_info,rscript, annotation_file)
 
     
 }

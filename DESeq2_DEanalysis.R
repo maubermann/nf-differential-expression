@@ -2,16 +2,17 @@
 
 require("tximport")
 require("DESeq2")
+library("rtracklayer")
 
 args <- commandArgs(trailingOnly = TRUE)
 
-quant_parent_dir <- "/Users/mo/code/assignments/BIOF/results/salmon"
-experiment_info_file <- "/Users/mo/code/assignments/BIOF/experiment_info.txt"
-tx2gene_file <- "/Users/mo/code/assignments/BIOF/tx2gene.csv"
+#quant_parent_dir <- "/Users/mo/code/assignments/BIOF/results/salmon"
+#experiment_info_file <- "/Users/mo/code/assignments/BIOF/experiment_info.txt"
+#gtf_file <- "/Users/mo/code/assignments/BIOF/Mus_musculus_c57bl6nj.C57BL_6NJ_v1.113.gtf.gz"
 
 quant_parent_dir <- args[1]
 experiment_info_file <- args[2]
-tx2gene_file <- args[3]
+gtf_file <- args[3]
 
 
 #mostly following tutorial on bioconductor
@@ -21,9 +22,15 @@ conditions <- experiment_info$condition
 
 quant_files <- file.path(quant_parent_dir, paste0(samples, "_quant"), "quant.sf")
 
-tx2gene <- read.csv(tx2gene_file, header = FALSE)
+#get transcript to gene mapping from gtx file 
+gtf <- import(gtf_file)
+tx2gene <- as.data.frame(gtf)[, c("transcript_id", "gene_id")]
+tx2gene <- tx2gene[(!is.na(tx2gene$transcript_id) )& (!is.na(tx2gene$gene_id)),]
+tx2gene <- tx2gene[!duplicated(tx2gene),]
 
-txi <- tximport(quant_files, type = "salmon", tx2gene = tx2gene)
+
+
+txi <- tximport(quant_files, type = "salmon", tx2gene = tx2gene, ignoreTxVersion = TRUE)
 
 colData <- data.frame(run = samples, condition = factor(conditions),row.names = samples)
 dds <- DESeqDataSetFromTximport(txi, colData, ~ condition)
