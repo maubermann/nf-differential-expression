@@ -1,8 +1,9 @@
 # Differential expression analysis workflow using newtflow 
 
 This project provides a simple pipeline that aims to identify genes that are differently expressed in two distinct groups of RNAseq samples. 
-The workflow is designed to take in raw paired end read data in the form of fastq files as input. The packages that were used are designed for short read data, but in theory this workflow will also run on long read data.
-After a successful run the user will be provided with a quality control report for each of the input samples, a MA-plot that visualizes the log2-fold change of the observed genes and a hitlist of genes that are appear to be differentiallu expressed after Benjamini Hochberg correction. Details on how to interpret these results can be found below.
+The workflow is designed to take in raw paired end short read RNAseq data in the form of fastq files as input.
+After a successful run the user will be provided with a quality control report for each of the input samples, a MA-plot that visualizes the log2-fold change of all observed genes and a hitlist of genes that appear to be differentiallu expressed after Benjamini Hochberg correction. Details on how to interpret these results can be found in the **Workflow** section of this README. Further investigating the differentially expressed genes can give valuable insight into the mechanisms behind the underlying differences between the two groups of interest. A next step to gain further interpretable insight could be GO enrichment analysis - i consider implementing it in a future version of this workflow.
+
 
 ## Set up
 
@@ -66,3 +67,6 @@ nextflow run deWorkflow.nf --input_dir "<FASTQ_DIRECTORY>" --referenceTranscript
 Here you will need to replace the arguments in the quotation marks with the required input paths (do not remove the quotation marks).  
 Note: The listing of the input files from the previous section is in the same order as the command line arguments. 
 
+## Workflow 
+
+![plot](https://github.com/maubermann/nf-differential-expression/blob/main/nextflow.png)
