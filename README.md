@@ -39,8 +39,6 @@ Examples for all files and directories that are required to run this workflow ar
   seqtk sample -s100 <EXPERIMENT_NAME>_1.fastq 100000 > sub_<EXPERIMENT_NAME>_1.fastq
   seqtk sample -s100 <EXPERIMENT_NAME>_2.fastq 100000 > sub_<EXPERIMENT_NAME>_2.fastq
   ```
-
-  
   
 * ### Reference transcriptome as fasta file
   The workflow can automatically handle compressed `.gz` fasta files.  
@@ -49,8 +47,22 @@ Examples for all files and directories that are required to run this workflow ar
   The workflow can automatically handle compressed `.gz` GTF files.
   I provided a GTF file for the provided reference transcriptome. It was downloaded from [here](https://ftp.ensembl.org/pub/release-113/gtf/mus_musculus_c57bl6nj/) using the Ensembl genome browser on 24.11.2024
 * ### Text file with a table specifying which experiments belong to which group
-  The first line of the file has to be `sample  condition`, every other line needs to contain an experiment name followed by a tab and the name of the group the experiment belongs to (for example control, treatment). 
+  The first line of the file has to be `sample  condition`, every other line needs to contain an experiment name followed by a tab and the name of the group the experiment belongs to (for example control, treatment). Note: The names of the experiments need to match the prefixes of the FASTQ files.
   There must only be two distinct group names. Refer to the provided [experiment_info.txt](experiment_info.txt).
 
 * ### CSV file containing all experiment names
-  The file specifying the experiment names needs to contain one line that contains the names of the experiments seperated by `, `.  
+  The file specifying the experiment names needs to contain one line only that contains the names of the experiments seperated by `, `. Refer to the provided [allExperiments.csv](allExperiments.csv).
+
+## Running the workflow
+In order to run the workflow you need to ensure that the docker daemon is running. When using docker desktop, you will simply need to open docker desktop.  
+Running the workflow on the provided example data does not not require additional command line arguments. Simply change your working directory to the root directory of this repository and simply run
+```console
+nextflow run deWorkflow.nf
+```
+When using your own data you will need to provide the reqired input files via the command line. Run
+```console
+nextflow run deWorkflow.nf --input_dir "<FASTQ_DIRECTORY>" --referenceTranscriptome "<FASTA_FILE>" --geneAnnotations "<GTF_FILE>" --experimentInfo "<GROUP_TABLE>" --allExperiments "<CSV_FILE>"
+```
+Here you will need to replace the arguments in the quotation marks with the required input paths (do not remove the quotation marks).  
+Note: The listing of the input files from the previous section is in the same order as the command line arguments. 
+
