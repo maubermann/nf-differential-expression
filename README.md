@@ -56,7 +56,7 @@ Examples for all files and directories that are required to run this workflow ar
 
 ## Running the workflow
 In order to run the workflow you need to ensure that the docker daemon is running. When using docker desktop, you will simply need to open docker desktop.  
-Running the workflow on the provided example data does not not require additional command line arguments. Simply change your working directory to the root directory of this repository and simply run
+Running the workflow on the provided example data does not not require additional command line arguments. Simply change your working directory to the root directory of this repository and run
 ```console
 nextflow run deWorkflow.nf
 ```
