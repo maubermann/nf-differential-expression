@@ -72,8 +72,15 @@ Note: The listing of the input files from the previous section is in the same or
 ![plot](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/nextflow_dag.png)
 
 ### Fastp quality control and preprocessing  
-This step is performed for every pair of FASTQ files. Fastq aims to remove bad quality bases from both ends of the reads and to trim off adapter sequences - which are remainings from primer sequences and don't provide biological signal. Further Fastp removes bad quality reads. Fastp provides a detailed report html report that can be interactively examined through a web browser. Further, a less detailed json report is provided that is more suitable for any downstream analysis of the quality control results. 
+This step is performed for every pair of FASTQ files. Fastq aims to remove bad quality bases from both ends of the reads and to trim off adapter sequences - which are remainings from primer sequences and don't provide biological signal. Further Fastp removes bad quality reads. Fastp provides a detailed report html report that can be interactively examined through a web browser. Further, a less detailed json report is provided that is more suitable for any downstream analysis of the quality control results. This step not only requires the FASTQ files but also a list containing all experiment names. This list is required to identify for every given experiment name in the list the related pair of FASTQ files.
 
-###
+### Salmon indexing and quantification
+In order to align (or rather quasi-map) the raw reads from the FASTQ files, Salmon requires building a trascriptome index from a reference transcriptome first. The reference trascriptome is composed of cDNA sequences that are complimentary to all known or predicted mRNA transcripts in the reference organism. Building an index from the transcriptome enables fast lookup for k-mers in the transcriptome, with the default of k being 31.  
+After building the index, for every sequencing experiment salmon quantifies the expressed genes using the paired reads. Salmon exploits the fast lookup of kmers to perform so called quasi-mapping of the reads which is a heuristic for performing traditional alignment against the reference. Salmon utilizes statistical models to correcto for different biases in the data, more speciffically varying read abundance from the ends of transcripts and from regions with high or low CG content. More detail on the methods can be found in the Salmon paper by [Patro et al](https://www.nature.com/articles/nmeth.4197).
+
+### DESeq 2 differential expression analysis
+
+
+
 
 
