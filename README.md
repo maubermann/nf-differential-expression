@@ -16,7 +16,7 @@ git clone https://github.com/maubermann/nf-differential-expression
 
 ## Dependencies
 
-To ensure reporoducibilities containerized versions of all required packages have been employed. In order to run the workflow you will need the ***docker engine*** and ***nextflow*** installed on your system.  
+To ensure reporoducibility, containerized versions of the required packages have been employed. In order to run the workflow you will only need the ***docker engine*** and ***nextflow*** installed on your system.  
 I encourage the installation of [Docker Desktop](https://docs.docker.com/get-started/get-docker/) which provides a graphical user interface.  
 For a more minimal installation of the docker engine please [go here](https://docs.docker.com/engine/install/) and follow the instructions specific to your operating system.
 For a guide on how to install nextflow, plese [go here](https://www.nextflow.io/docs/latest/install.html).
