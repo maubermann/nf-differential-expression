@@ -100,5 +100,7 @@ Above the read quality for `SRR25436327_1` are shown before (left) and after (ri
 Above the base contents per position of the reads in `SRR25436327_1` are shown before (left) and after (right) preprocessing. The fact that certain bases are over- or underrepresented at the 5' end of the reads might indicate the presence of certain adapter sequences or primer residuals. While fastp attempted to detect and remove adapter sequences, the base contents at the 5' end don't change. Very slight improvements can be observed at the 3' ends of the reads, likely due to the filtering of low quality reads.
 
 ### DESeq2 
+The outputs of DESeq2 provide indicate which genes appear to be differentially expressed. 
+![MA](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/MA_plot.pdf)
 
 
