@@ -89,8 +89,10 @@ After completion of differential expression analyisis the user is provided whith
 ## Output files 
 Below i will give an overview over the output of the workflow and briefly discuss a reference output for the provided example data. Please keep in mind that the FASTQ files used for this analysis were subsampeled and therefoere strongly reduced in size. Due to this limitation, the results for this dataset might not be biologically meaningful.  
 After a successful run of the workflow, the root directory of this repository will contain an additional directory named `results`. In `results/salmon` you will find the a directory for every sequencing experiment containing the quantification files that were created by Salmon (along with some other data). I will not discuss these files here, as they are not ment for interpretation by the user. In `results/fastp` you will find html and json reports for every sequencing experiments and the preprocessed FASTQ files. In `results/DESEQ2` you will find a MA-plot along with the hitlist genes that appear to be differentially expressed (adjusted p < 0.05).
+
 ### Fastp report 
 
+The fastp reports are similar to FastQC reports, however they also provide information on the performed preprocessing. Here some details of the fastp html report for the sequencing experiment `SRR25436327` are discussed. The report indicates that 197,204 reads passed quality control, the remaining 2,796 reads were filtered out due to low quality, a high amount of N (bases that could not get called) or due to short length. 
 
 
 
