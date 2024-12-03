@@ -69,7 +69,7 @@ Note: The listing of the input files from the previous section is in the same or
 
 ## Workflow 
 
-![plot](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/nextflow_dag.png)
+![plot](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/nextflow_DAG.png)
 
 ### Fastp quality control and preprocessing  
 This step is performed for every pair of FASTQ files. Fastp aims to remove bad quality bases from both ends of the reads and to trim off adapter sequences - which are remainings from primer sequences and don't provide biological signal. Further Fastp removes bad quality reads. Fastp provides a detailed report html report that can be interactively examined through a web browser. Further, a less detailed json report is provided that is more suitable for any downstream analysis of the quality control results. This step not only requires the FASTQ files but also a list containing all experiment names. This list is required to identify for every given experiment name in the list the related pair of FASTQ files. For further details on the employed methods refer to the fastp paper by [Chen et al](https://doi.org/10.1093/bioinformatics/bty560)
