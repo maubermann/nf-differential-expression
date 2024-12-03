@@ -84,7 +84,7 @@ As DESeq2 requires gene-level count matrices the transcript abundance estimates 
 $$ \log _2 FC(gene_i) = \log \left(\frac{\text{expression of gene$_i$ in group 1}}{\text{expression of gene$_i$ in group 2}} \right)$$
 
 Whether the log2 fold change is significantly different from zero 0 (in other words whether the appears to be differentially expressed in the two groups) is then determined using the Wald test, providing the user with a p-value for every gene. To adjust for multiple testing and reduce the false discovery rate, Benjamini-Hochberg procedure is applied. For further details refer to the DESeq2 paper by [Love et al](https://link.springer.com/article/10.1186/s13059-014-0550-8). 
-After completion of differential expression analyisis the user is provided whith a MA-plot that visualizes for every gene its mean expression value and the estimated log2 fold change. Genes for which the adjusted p-value is below a threshold of 0.1 are highlighted in the plot. Further, genes with an adjusted p-value below a significance threshold of 0.05 are provided to the user in a hit list. 
+After completion of differential expression analyisis the user is provided whith a MA-plot that visualizes for every gene its mean expression value and the estimated log2 fold change. Genes for which the adjusted p-value is below a threshold of 0.05 are highlighted in the plot. Further, genes with an adjusted p-value below a significance threshold of 0.05 are provided to the user in a hit list. 
 
 ## Output files 
 Below i will give an overview over the output of the workflow and briefly discuss a reference output for the provided example data. Please keep in mind that the FASTQ files used for this analysis were subsampeled and therefoere strongly reduced in size. Due to this limitation, the results for this dataset might not be biologically meaningful.  
@@ -101,6 +101,7 @@ Above the base contents per position of the reads in `SRR25436327_1` are shown b
 
 ### DESeq2 
 The outputs of DESeq2 provide indicate which genes appear to be differentially expressed. 
-![MA](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/MA-plot.png)
+![MA](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/MA_plot.png)
+Here, the log2 fold change for each gene is plotted against its mean read count, providing a clear visualization of differential expression. Log2 fold changes strongly different from zero point towards differential expression. It shows, that the mean read count is very low, which is due to initial subsampling of the FASTQ files. Due to these low read counts, only 13 Genes are significantly differentially expressed - they are highlighted in red.
 
 
