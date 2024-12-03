@@ -101,6 +101,6 @@ Above the base contents per position of the reads in `SRR25436327_1` are shown b
 
 ### DESeq2 
 The outputs of DESeq2 provide indicate which genes appear to be differentially expressed. 
-![MA](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/MA_plot.pdf)
+![MA](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/MA-plot.png)
 
 
