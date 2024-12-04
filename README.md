@@ -13,7 +13,7 @@ Further investigating the differentially expressed genes can give valuable insig
 ```console
 git clone https://github.com/maubermann/nf-differential-expression
 ```
-3. When running this workflow on linux you might need to replace the `nextflow.config` file with the version I provided in the supplementaries. You should skip this step for macOS.
+3. When running this workflow on linux, you might need to replace the `nextflow.config` file with the version I provided in the supplementaries. This is due to the root priviledges that are required to run docker containers. You should skip this step for macOS.
 ```console
 cd nf-differential-expression
 rm nextflow.config
