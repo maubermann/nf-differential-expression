@@ -98,7 +98,7 @@ After a successful run of the workflow, the root directory of this repository wi
 
 ### Fastp report 
 
-The fastp reports are similar to FastQC reports, however they also provide information on the performed preprocessing. Here, some details from the fastp [HTML report](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/sub_SRR25436327_fastp_report.html) sequencing experiment `SRR25436327` are discussed. The report indicates that 197,204 reads passed quality control, the remaining 2,796 reads were filtered out due to low quality, a high amount of N (bases that could not get called) or due to short length. 
+The fastp reports are similar to FastQC reports, however they also provide information on the performed preprocessing. Here, certain details from the fastp [HTML report](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/sub_SRR25436327_fastp_report.html) for the sequencing experiment `SRR25436327` are discussed. The report indicates that 197,204 reads passed quality control, the remaining 2,796 reads were filtered out due to low quality, a high amount of N (bases that could not get called) or due to short length. 
 ![read_quality](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/read_quality_SRR25436327_1.png)
 Above the read quality for `SRR25436327_1` are shown before (left) and after (right) preprocessing. The plot indicates for any given position a quality score for the basecalling of the four nucleotides. Scores above 20 are considered good. One can observe that the quality scores slightly improve through processing, likely by excluding low quality reads. Generally speaking, the results show good read quality, even before filtering.
 
