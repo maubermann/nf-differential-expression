@@ -14,7 +14,7 @@ quant_parent_dir <- args[1]
 experiment_info_file <- args[2]
 gtf_file <- args[3]
 
-
+set.seed(42)
 #mostly following tutorial on bioconductor
 experiment_info <- read.table(experiment_info_file, header = TRUE, stringsAsFactors = FALSE)
 samples <- experiment_info$sample

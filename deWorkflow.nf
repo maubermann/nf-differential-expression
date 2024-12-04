@@ -1,18 +1,16 @@
-params.input_dir = "FASTQ_sub"
+params.input_dir = "${projectDir}/example_data/FASTQ_sub"
 
-params.allExperiments = "allExperiments.csv"
-params.experimentInfo = "experiment_info.txt"
+params.allExperiments = "${projectDir}/example_data/allExperiments.csv"
+params.experimentInfo = "${projectDir}/example_data/experiment_info.txt"
 
-params.tx2gene = "tx2gene.csv"
-params.referenceTranscriptome ="Mus_musculus_c57bl6nj.C57BL_6NJ_v1.cdna.all.fa.gz"
-params.geneAnnotations = "Mus_musculus_c57bl6nj.C57BL_6NJ_v1.113.gtf.gz"
+params.referenceTranscriptome ="${projectDir}/example_data/Mus_musculus_c57bl6nj.C57BL_6NJ_v1.cdna.all.fa.gz"
+params.geneAnnotations = "${projectDir}/example_data/Mus_musculus_c57bl6nj.C57BL_6NJ_v1.113.gtf.gz"
 
-params.rscript = "DESeq2_DEanalysis.R"
 
+
+//The fastQC process is unused 
 process fastQC{
-
     publishDir 'results', mode: 'symlink'
-    //container 'maubermann/test:1.0'
     container 'staphb/fastqc:0.12.1'
     
     input:
@@ -26,8 +24,6 @@ process fastQC{
     """
     fastqc ${fastq_file}
     """ 
-    //315 mds and 151
-
 
 }
 
@@ -35,7 +31,7 @@ process fastQC{
 
 process FASTP {
     publishDir 'results/fastp', mode: 'symlink'
-    container 'staphb/fastp:0.23.4'
+    container 'biocontainers/fastp:v0.19.6dfsg-1-deb_cv1'
 
     input:
         path fastq_dir
@@ -57,6 +53,7 @@ process FASTP {
             --detect_adapter_for_pe --cut_front --cut_tail
     
     """
+    //outputs trimmed fastq files and quality reports
 }
 
 process SALMON_INDEX{
@@ -72,6 +69,7 @@ process SALMON_INDEX{
     """
     salmon index -t ${input_transcriptome} -i index_file
     """
+    //indexing step for quasi-mapping in SALMON_QUANTIFY
 }
 
 process SALMON_QUANTIFY{
@@ -81,8 +79,6 @@ process SALMON_QUANTIFY{
     input:
     tuple val(experiment_name), path(fastq_file_1), path(fastq_file_2)
     path index_file
-    
-    
 
     output:
     path "${experiment_name}_quant"
@@ -95,9 +91,9 @@ process SALMON_QUANTIFY{
         --validateMappings \
         -o ${experiment_name}_quant
     """
-    //recommended: --gcBias
+    //recommended additional flag: --gcBias
+    //Transcript quantification for a pair of FASTQ files
 
- 
 }
 
 
@@ -119,27 +115,35 @@ process DESEQ2{
 
     script:
     """
-    #chmod +x ${deseq2_r_script}
+    chmod +x ${deseq2_r_script}
     ./${deseq2_r_script} . ${experiment_info} ${annotations} 
     """
+    //the first line of the script ensures, that the script is made executable
+    // R script performs basic differential expression analysis with the DESeq2 R package
 
 }
 
 workflow  {
-    //accessory files that arent main data inputs dont need own channel:   xfile = file(params.xfile)
+
+    //declaration of all external files
     fastq_directory = file(params.input_dir)
-    all_filenames_ch = Channel.fromPath(params.allExperiments).splitCsv().flatten()
+    
     transcriptome = file(params.referenceTranscriptome)
     annotation_file = file(params.geneAnnotations)
 
+    experiment_info = file(params.experimentInfo)
+    all_filenames_ch = Channel.fromPath(params.allExperiments).splitCsv().flatten()
+
+    rscript_path = "${projectDir}/DESeq2_DEanalysis.R"
+
+    //fastp process
     FASTP(fastq_directory, all_filenames_ch)
+
+    //salmon processes
     SALMON_INDEX(transcriptome)
     SALMON_QUANTIFY(FASTP.out.trimmedTuple, SALMON_INDEX.out)
 
-    
-    rscript = file(params.rscript)
-    experiment_info = file(params.experimentInfo)
-    DESEQ2(SALMON_QUANTIFY.out.collect(), experiment_info,rscript, annotation_file)
+    //DESeq2 analysis
+    DESEQ2(SALMON_QUANTIFY.out.collect(), experiment_info, rscript_path, annotation_file)
 
-    
 }
