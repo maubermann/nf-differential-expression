@@ -31,6 +31,19 @@ In order to test this workflow I used:
 * Docker Desktop 4.34.3  
 * Nextflow 24.10.0
 
+## Loaded containers
+Below is a list of all containers used by this workflow, along with the specific packages and their versions that are utilized by the workflow within each container. If not already loaded, these containers will be automatically pulled from [docker hub](https://hub.docker.com)  
+
+### biocontainers/fastp:v0.19.6dfsg-1-deb_cv1  
+* fastp 0.19.6
+### combinelab/salmon:1.10.3
+* salmon 1.10.3
+### resolwebio/rnaseq:5.11.0
+* R 3.6.3
+* tximport 1.14.2
+* DESeq2 1.26.0
+* rtracklayer 1.46.0
+
 ## Input files:
 Examples for all files and directories that are required to run this workflow are provided in this repository. Below I specify what files need to be provided and how the examples that I provided in this repository were obtained. 
 
@@ -109,5 +122,6 @@ Above the base contents per position of the reads in `SRR25436327_1` are shown b
 The outputs of DESeq2 indicate, which genes appear to be differentially expressed. Below, the MA-plot for the provided example data is shown.
 ![MA](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/MA_plot.png)
 Here, the log2 fold change for each gene is plotted against its mean read count, providing a clear visualization of differential expression. Log2 fold changes that are strongly different from zero indicate differential expression in the two groups. It is visible that the mean read counts are generally very low, and the deviaton of most log2 fold changes from zero is relatively high, which is due to initial subsampling of the fastq files. Because of the resulting low read counts, only 13 genes were shown to be significantly differentially expressed - they are highlighted in red. The identifyers of these genes (as presented in the GTF file) along with their adjusted p-values can be found [here](https://github.com/maubermann/nf-differential-expression/blob/main/supplementary/genes_padj_significant.csv). Please note: Due to the usage of random numbers in the Salmon algorithm during quasi-mapping, the adjusted p-values are not perfectly reproducible. However, rerunning the workflow 5 times always identified the same 13 genes with minor differences in their adjusted p-values, indicating, that the workflow provides, despite its non-deterministic nature, reproducible results.
+
 
 
